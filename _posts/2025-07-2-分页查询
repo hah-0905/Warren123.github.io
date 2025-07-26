@@ -1,0 +1,32 @@
+---
+title: "Spring Boot 分页查询：原生分页与 PageHelper 实现"
+date: 2025-07-26
+author: Warren Wu
+tags:
+  - Spring Boot
+  - PageHelper
+  - MyBatis
+  - 分页查询
+categories:
+  - 后端开发
+---
+
+# Spring Boot 分页查询详解
+
+本文介绍两种分页实现方式：
+
+- ✅ 自定义 SQL 分页
+- ✅ 使用 PageHelper 插件自动分页
+
+---
+
+## 一、自定义 SQL 分页实现
+
+### 📦 依赖配置（pom.xml）
+
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>2.1.1</version>
+</dependency>
