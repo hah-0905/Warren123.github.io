@@ -1,0 +1,92 @@
+📚 目录（Table of Contents）
+
+🚀 一、YAML 配置（application.yml）
+
+⚙️ 二、RedisTemplate 配置类
+
+🧪 三、Spring Boot 测试类
+
+🔌 1. 注入 RedisTemplate
+
+📦 2. 获取 Redis 五种数据结构操作对象
+
+📝 四、Redis 字符串（String）操作示例
+
+🔑 五、Redis 哈希（Hash）操作示例
+
+🚀 一、YAML 配置（application.yml）
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: "123456"
+    database: 10
+
+redis:
+  host: ${spring.redis.host}
+  port: ${spring.redis.port}
+  password: ${spring.redis.password}
+  database: ${spring.redis.database}
+
+⚙️ 二、RedisTemplate 配置类
+@Configuration
+@Slf4j
+public class RedisConfiguration {
+
+    @Bean
+    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        log.info("开始创建redis模板对象...");
+        RedisTemplate redisTemplate = new RedisTemplate();
+        
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        
+        return redisTemplate;
+    }
+}
+
+🧪 三、Spring Boot 测试类
+🔌 1. 注入 RedisTemplate
+@SpringBootTest
+public class SpringDataRedisTest {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+📦 2. 获取 Redis 五种数据结构操作对象
+@Test
+public void testRedisTemplate() {
+    System.out.println(redisTemplate);
+
+    ValueOperations valueOperations = redisTemplate.opsForValue();
+    HashOperations hashOperations = redisTemplate.opsForHash();
+    ListOperations listOperations = redisTemplate.opsForList();
+    SetOperations setOperations = redisTemplate.opsForSet();
+    ZSetOperations zSetOperations = redisTemplate.opsForZSet();
+}
+
+📝 四、Redis 字符串（String）操作示例
+@Test
+public void testString() {
+    redisTemplate.opsForValue().set("city","北京");
+    String city = (String) redisTemplate.opsForValue().get("city");
+    System.out.println(city);
+
+    redisTemplate.opsForValue().set("code", "1234", 3, TimeUnit.MINUTES);
+
+    redisTemplate.opsForValue().setIfAbsent("lock","1");
+    redisTemplate.opsForValue().setIfAbsent("lock","2");
+}
+
+🔑 五、Redis 哈希（Hash）操作示例
+@Test
+public void testhash(){
+    HashOperations hashOperations = redisTemplate.opsForHash();
+
+    hashOperations.put("001","name","张三");
+    hashOperations.put("001","age","23");
+
+    String name = (String) hashOperations.get("001", "name");
+    System.out.println(name);
+}
+
